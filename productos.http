@@ -1,0 +1,33 @@
+### Obtener todos los productos
+GET http://localhost:8080/api/products/
+
+### Obtener un producto por ID (reemplaza :pid con el ID de un producto existente)
+GET http://localhost:8080/api/products/:pid
+
+### Agregar un nuevo producto
+POST http://localhost:8080/api/products/
+Content-Type: application/json
+
+{
+      "id": "1",
+      "title": "Nuevo Producto",
+      "description": "Descripción Nuevo Producto",
+      "code": "C1",
+      "price": 10.99,
+      "status": true,
+      "stock": 100,
+      "category": "Categoría A",
+      "thumbnails": ["img1.jpg", "img2.jpg"]
+}
+
+### Actualizar un producto por ID (reemplaza :pid con el ID de un producto existente)
+PUT http://localhost:8080/api/products/:pid
+Content-Type: application/json
+
+{
+  "price": 29.99,
+  "stock": 60
+}
+
+### Eliminar un producto por ID (reemplaza :pid con el ID de un producto existente)
+DELETE http://localhost:8080/api/products/:pid

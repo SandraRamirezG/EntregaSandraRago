@@ -1,0 +1,48 @@
+[
+  [
+    {
+      "id": "1",
+      "title": "Cofias",
+      "description": "Descripción de Cofias",
+      "code": "C1",
+      "price": 10.99,
+      "status": true,
+      "stock": 100,
+      "category": "Categoría A",
+      "thumbnails": ["img1.jpg", "img2.jpg"]
+    },
+    {
+      "id": "2",
+      "title": "Manguillas",
+      "description": "Descripción de Manguillas",
+      "code": "M2",
+      "price": 15.99,
+      "status": true,
+      "stock": 50,
+      "category": "Categoría B",
+      "thumbnails": ["img3.jpg", "img4.jpg"]
+    },
+    {
+      "id": "3",
+      "title": "Cubrecalzado",
+      "description": "Descripción de Cubrecalzado",
+      "code": "CC3",
+      "price": 8.99,
+      "status": true,
+      "stock": 75,
+      "category": "Categoría C",
+      "thumbnails": ["img5.jpg", "img6.jpg"]
+    },
+    {
+      "id": "4",
+      "title": "Pecheras",
+      "description": "Descripción de Pecheras",
+      "code": "P4",
+      "price": 12.99,
+      "status": true,
+      "stock": 60,
+      "category": "Categoría A",
+      "thumbnails": ["img7.jpg", "img8.jpg"]
+    }
+  ]
+]
