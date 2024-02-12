@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        .message {
+            margin-bottom: 10px;
+        }
+        .user {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat</h1>
+    <div id="chat-messages">
+        {{#each messages}}
+            <div class="message">
+                <span class="user">{{this.user}}:</span> {{this.message}}
+            </div>
+        {{/each}}
+    </div>
+    <form id="message-form">
+        <input type="text" id="user" placeholder="Your Name">
+        <input type="text" id="message" placeholder="Your Message">
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        // Aquí iría el código JavaScript para manejar el envío de mensajes
+    </script>
+</body>
+</html>
