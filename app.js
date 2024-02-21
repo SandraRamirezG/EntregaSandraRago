@@ -3,6 +3,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fileSystemManager = require('./dao/fileSystemManager');
 const mongodbManager = require('./dao/mongodbManager');
+const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+const path = require('path');
 
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
