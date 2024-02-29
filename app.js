@@ -7,6 +7,9 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github').Strategy;
 
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -28,9 +31,24 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 
-app.use('/products', productRoutes);
-app.use('/carts', cartRoutes);
-app.use('/messages', messageRoutes);
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Passport middleware
+app.use(passport.initialize());
+
+// Passport Github autenticación
+passport.use(new GitHubStrategy({
+    clientID: GITHUB_CLIENT_ID,
+    clientSecret: GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+},
+    function (accessToken, refreshToken, profile, cb) {
+        User.findOrCreate({ githubId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });
+    }
+));
 
 // Start the server
 const PORT = process.env.PORT || 3000;
