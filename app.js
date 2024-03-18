@@ -10,13 +10,30 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
+const session = require('express-session');
+const passport = require('./passport');
+const cookieParser = require('cookie-parser');
 
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB', err));
 
+// Configuración de Express y MongoDB
 const app = express();
+
+app.use(cookieParser());
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true
+
+    }));  // Inicializa la sesión
+
+
+
+
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,10 +43,32 @@ app.use(bodyParser.json());
 app.engine('handlebars', require('express-handlebars')());
 app.set('view engine', 'handlebars');
 
-// Routes
-const productRoutes = require('./routes/productRoutes');
+// Importar rutas y modelos necesarios
+const userRoutes = require('./routes/userRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const productRoutes = require('./routes/productRoutes');
+
+app.use(passport.initialize());
+app.use(passport.session());
+mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Could not connect to MongoDB', err));
+
+// Rutas
+app.use('/api/users', userRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/carts', cartRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/products', productRoutes);
+
+// Iniciar el servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,8 +89,11 @@ passport.use(new GitHubStrategy({
     }
 ));
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const userRoutes = require('./routes/userRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
+
+// Rutas de usuarios
+app.use('/api/users', userRoutes);
+
+// Rutas de sesiones
+app.use('/api/sessions', sessionRoutes);

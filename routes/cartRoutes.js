@@ -3,6 +3,8 @@ const router = express.Router();
 const Cart = require('../dao/models/cart');
 const Product = require('../dao/models/product');
 
+
+
 // GET: Obtener todos los carritos
 router.get('/', (req, res) => {
     // Lógica para obtener todos los carritos
