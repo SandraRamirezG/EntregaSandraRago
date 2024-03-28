@@ -13,6 +13,7 @@ const GitHubStrategy = require('passport-github').Strategy;
 const session = require('express-session');
 const passport = require('./passport');
 const cookieParser = require('cookie-parser');
+const config = require('./config');
 
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -50,6 +51,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const productRoutes = require('./routes/productRoutes');
 
+//Passport milware
 app.use(passport.initialize());
 app.use(passport.session());
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -62,6 +64,10 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/products', productRoutes);
+
+app.use('/products', productRoutes);
+app.use('/carts', cartRoutes);
+app.use('/messages', messageRoutes);
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
@@ -88,6 +94,11 @@ passport.use(new GitHubStrategy({
         });
     }
 ));
+
+//Routes
+const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 const userRoutes = require('./routes/userRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');

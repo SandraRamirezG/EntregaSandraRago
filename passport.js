@@ -3,9 +3,12 @@ const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('./dao/models/user');
+const config = require('./config');
 
+//Estrategia local
 passport.use(new LocalStrategy({
-    usernameField: 'email'
+    usernameField: 'email',
+    passwordField: 'password'
 }, async (email, password, done) => {
     try {
         const user = await User.findOne({ email });
@@ -55,4 +58,23 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
+const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config.secretKey
+};
+
+passport.use(new JwtStrategy(jwtOptions, async (payload, done) => {
+    try {
+        const user = await User.findById(payload.id);
+        if (!user) {
+            return done(null, false);
+        }
+        return done(null, user);
+    } catch (error) {
+        return done(error, false);
+    }
+}));
+
+
 module.exports = passport;
+
