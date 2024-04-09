@@ -14,6 +14,7 @@ const session = require('express-session');
 const passport = require('./passport');
 const cookieParser = require('cookie-parser');
 const config = require('./config');
+const ticketRoutes = require('./routes/ticketRoutes');
 
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -108,3 +109,8 @@ app.use('/api/users', userRoutes);
 
 // Rutas de sesiones
 app.use('/api/sessions', sessionRoutes);
+
+app.use('/products', productRoutes);
+app.use('/carts', cartRoutes);
+app.use('/tickets', ticketRoutes); // Nuevo
+

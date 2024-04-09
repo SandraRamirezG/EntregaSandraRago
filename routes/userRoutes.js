@@ -3,6 +3,9 @@ const router = express.Router();
 const passport = require('../passport');
 const User = require('../dao/models/user');
 
+const { isAdmin, isUser } = require('../middlewares/authorizationMiddleware');
+
+
 // POST /api/users/register
 router.post('/register', async (req, res) => {
     try {
@@ -19,5 +22,18 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// Ruta protegida para administradores
+router.get('/admin', isAdmin, (req, res) => {
+    res.send('Esta es una ruta protegida para administradores');
+});
+
+// Ruta protegida para usuarios normales
+router.get('/user', isUser, (req, res) => {
+    res.send('Esta es una ruta protegida para usuarios normales');
+});
+
+
+
 
 module.exports = router;

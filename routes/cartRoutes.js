@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Cart = require('../dao/models/cart');
 const Product = require('../dao/models/product');
-
+const Ticket = require('../dao/models/ticket');
 
 
 // GET: Obtener todos los carritos
@@ -38,4 +38,12 @@ router.delete('/:cartId', (req, res) => {
     res.send(`DELETE request to /carts/${cartId}`);
 });
 
+// POST /carts/:cid/purchase
+router.post('/:cid/purchase', async (req, res) => {
+    // Código para finalizar el proceso de compra
+});
+
+
+
 module.exports = router;
+
