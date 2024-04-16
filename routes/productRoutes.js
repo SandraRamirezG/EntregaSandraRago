@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../dao/models/product');
 
+const { generateMockProducts } = require('../dao/mockingManager');
+
 // Todos los productos
 router.get('/', async (req, res) => {
     try {
@@ -37,5 +39,12 @@ router.post('/', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+// Endpoint para generar productos simulados
+router.get('/mockingproducts', (req, res) => {
+    const mockProducts = generateMockProducts();
+    res.json(mockProducts);
+});
+
 
 module.exports = router;

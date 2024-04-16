@@ -16,6 +16,8 @@ const cookieParser = require('cookie-parser');
 const config = require('./config');
 const ticketRoutes = require('./routes/ticketRoutes');
 
+const errorHandler = require('./errorHandler');
+
 // Conexion Mongo
 mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
@@ -31,11 +33,6 @@ app.use(session({
     saveUninitialized: true
 
     }));  // Inicializa la sesión
-
-
-
-
-
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -114,3 +111,5 @@ app.use('/products', productRoutes);
 app.use('/carts', cartRoutes);
 app.use('/tickets', ticketRoutes); // Nuevo
 
+//Middleware para manejar errores
+app.use(errorHandler);
