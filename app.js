@@ -26,6 +26,9 @@ mongoose.connect('mongodb://localhost:27017/ecommerce', { useNewUrlParser: true,
 // Configuración de Express y MongoDB
 const app = express();
 
+const logger = require('./logger');
+
+
 app.use(cookieParser());
 app.use(session({
     secret: 'your_secret_key',
@@ -41,6 +44,24 @@ app.use(bodyParser.json());
 // Set up Handlebars
 app.engine('handlebars', require('express-handlebars')());
 app.set('view engine', 'handlebars');
+
+// middleware para manejo de errores
+app.use((err, req, res, next) => {
+    logger.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// Ruta para probar logs
+app.get('/loggerTest', (req, res) => {
+    logger.debug('Debug log message');
+    logger.http('HTTP log message');
+    logger.info('Info log message');
+    logger.warning('Warning log message');
+    logger.error('Error log message');
+    logger.fatal('Fatal log message');
+    res.send('Logger test');
+});
+
 
 // Importar rutas y modelos necesarios
 const userRoutes = require('./routes/userRoutes');
