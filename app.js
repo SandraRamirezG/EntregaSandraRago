@@ -8,14 +8,12 @@ const GitHubStrategy = require('passport-github').Strategy;
 const path = require('path');
 const logger = require('./logger');
 const errorHandler = require('./errorHandler');
-
-// Importar rutas
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes').default;
 const sessionRoutes = require('./routes/sessionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const productRoutes = require('./routes/productRoutes');
-const ticketRoutes = require('./routes/ticketRoutes'); // Nuevo
+const ticketRoutes = require('./routes/ticketRoutes'); 
 
 // Inicializar la aplicación de Express
 const app = express();
