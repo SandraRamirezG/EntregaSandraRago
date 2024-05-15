@@ -8,12 +8,20 @@ const GitHubStrategy = require('passport-github').Strategy;
 const path = require('path');
 const logger = require('./logger');
 const errorHandler = require('./errorHandler');
+
 const userRoutes = require('./routes/userRoutes').default;
 const sessionRoutes = require('./routes/sessionRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const productRoutes = require('./routes/productRoutes');
-const ticketRoutes = require('./routes/ticketRoutes'); 
+const ticketRoutes = require('./routes/ticketRoutes');
+
+//Importa Swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+
+
 
 // Inicializar la aplicación de Express
 const app = express();
@@ -58,6 +66,26 @@ app.use('/api/carts', cartRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes); // Nuevo
+
+// Configuración de Swagger
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Ecommerce API',
+            version: '1.0.0',
+            description: 'API documentation for Ecommerce project'
+        },
+        servers: [
+            { url: 'http://localhost:3000', description: 'Local server' }
+        ]
+    },
+    apis: ['./routes/*.js'] // Rutas donde se encuentran tus definiciones de Swagger
+};
+
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 
 // Ruta para probar logs
 app.get('/loggerTest', (req, res) => {
