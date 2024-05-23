@@ -48,3 +48,43 @@ router.get('/mockingproducts', (req, res) => {
 
 
 module.exports = router;
+
+import { Router } from 'express';
+import { isAdmin, isUser } from '../middlewares/authorizationMiddleware';
+import ProductController from '../controllers/productController';
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Get all products
+ *     responses:
+ *       200:
+ *         description: Array of all products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ */
+router.get('/', ProductController.getAllProducts);
+
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Create a new product
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ */
+router.post('/', isAdmin, ProductController.createProduct);
+
+export default router;

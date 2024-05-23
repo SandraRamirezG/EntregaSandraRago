@@ -45,4 +45,15 @@ router.put('/premium/:uid', changeUserRole);
 
 export default router;
 
+router.put('/premium/:uid', async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const updatedUser = await UserController.changeUserRole(uid);
+        res.status(200).json({ message: 'Rol de usuario actualizado', user: updatedUser });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 module.exports = router;

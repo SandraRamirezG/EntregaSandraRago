@@ -47,3 +47,48 @@ router.post('/:cid/purchase', async (req, res) => {
 
 module.exports = router;
 
+import { Router } from 'express';
+import CartController from '../controllers/cartController';
+
+
+/**
+ * @swagger
+ * /api/carts:
+ *   get:
+ *     summary: Get all carts
+ *     responses:
+ *       200:
+ *         description: Array of all carts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Cart'
+ */
+router.get('/', CartController.getAllCarts);
+
+/**
+ * @swagger
+ * /api/carts/add:
+ *   post:
+ *     summary: Add a product to the cart
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 example: someProductId
+ *     responses:
+ *       200:
+ *         description: Product added to cart successfully
+ *       400:
+ *         description: Missing productId
+ */
+router.post('/add', CartController.addToCart);
+
+export default router;
