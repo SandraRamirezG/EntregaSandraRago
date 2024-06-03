@@ -1,59 +1,32 @@
-import { Router } from 'express';
-const router = Router();
-import { isAdmin, isUser } from '../middlewares/authorizationMiddleware';
-import { forgotPassword, changeUserRole } from '../controllers/userController';
-
 const express = require('express');
-
-const UserController = require('../controllers/userController');
-
-// Importar el modelo User
+const router = express.Router();
+const { forgotPassword, changeUserRole, uploadDocuments } = require('../controllers/userController');
+const multer = require('multer');
+const path = require('path');
 const User = require('../dao/models/user');
 
-// POST /api/users/register
-router.post('/register', async (req, res) => {
-    try {
-        const newUser = new User({
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            email: req.body.email,
-            age: req.body.age,
-            password: req.body.password
-        });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        let folder = 'uploads/';
+        if (file.fieldname === 'profile') folder = 'uploads/profiles';
+        if (file.fieldname === 'product') folder = 'uploads/products';
+        if (file.fieldname === 'document') folder = 'uploads/documents';
+        cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
-// Ruta protegida para administradores
-router.get('/admin', isAdmin, (req, res) => {
-    res.send('Esta es una ruta protegida para administradores');
-});
+const upload = multer({ storage: storage });
 
-// Ruta protegida para usuarios normales
-router.get('/user', isUser, (req, res) => {
-    res.send('Esta es una ruta protegida para usuarios normales');
-});
+// POST /api/users/:uid/documents
+router.post('/:uid/documents', upload.array('documents'), uploadDocuments);
 
-// Ruta para enviar correo de recuperación de contraseña
-router.post('/forgot-password', forgotPassword);
-
-// Ruta para cambiar el rol de usuario
+// PUT /api/users/premium/:uid
 router.put('/premium/:uid', changeUserRole);
 
-export default router;
-
-router.put('/premium/:uid', async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const updatedUser = await UserController.changeUserRole(uid);
-        res.status(200).json({ message: 'Rol de usuario actualizado', user: updatedUser });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
+// Otras rutas existentes
+router.post('/forgot-password', forgotPassword);
 
 module.exports = router;
