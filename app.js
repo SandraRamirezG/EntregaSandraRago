@@ -18,6 +18,10 @@ const messageRoutes = require('./routes/messageRoutes');
 const productRoutes = require('./routes/productRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 
+const orderRoutes = require('./routes/orderRoutes');
+const config = require("express-session");
+const adminRoutes = require("./routes/adminRoutes");
+
 // Inicializar la aplicación de Express
 const app = express();
 
@@ -50,6 +54,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(session({ secret: config.sessionSecret, resave: false, saveUninitialized: true }));
 
 // Set up Handlebars
 app.engine('handlebars', require('express-handlebars')());
@@ -81,6 +86,8 @@ app.use('/api/carts', cartRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes); // Nuevo
+app.use('/admin', adminRoutes);
+
 
 // Ruta para probar logs
 app.get('/loggerTest', (req, res) => {
@@ -104,5 +111,13 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+app.use(express.static('public'));
+
+app.listen(config.port, () => {
+    console.log(`Server running on port ${config.port}`);
+});
+
+
+
 
 module.exports = app; // la app para usarla en los tests
